@@ -6,32 +6,32 @@ using namespace std;
 typedef struct PCB
 {
     /* data */
-    int name; // ½ø³ÌÃû³Æ,Ê¹ÓÃÊý×Ö±íÊ¾Ãû³Æ
-    int type; // ½ø³ÌÀàÐÍ/Éú²úÕß¡¢Ïû·ÑÕß,1±íÊ¾Éú²úÕß£¬0±íÊ¾Ïû·ÑÕß
+    int name; // è¿›ç¨‹åç§°,ä½¿ç”¨æ•°å­—è¡¨ç¤ºåç§°
+    int type; // è¿›ç¨‹ç±»åž‹/ç”Ÿäº§è€…ã€æ¶ˆè´¹è€…,1è¡¨ç¤ºç”Ÿäº§è€…ï¼Œ0è¡¨ç¤ºæ¶ˆè´¹è€…
 } PCB;
 
-// º¯ÊýÉùÃ÷
+// å‡½æ•°å£°æ˜Ž
 void Creat_Process();
 
-int num = -1;         // ¼ÇÂ¼»º³åÇøÖÐµÄÊý¾ÝÊýÁ¿
-int buffer[BUF_SIZE]; // »º³åÇø
+int num = -1;         // è®°å½•ç¼“å†²åŒºä¸­çš„æ•°æ®æ•°é‡
+int buffer[BUF_SIZE]; // ç¼“å†²åŒº
 
-queue<PCB> PCB_P;    // Éú²úÕßµÈ´ý¶ÓÁÐ
-queue<PCB> PCB_C;    // Ïû·ÑÕßµÈ´ý¶ÓÁÐ
-queue<PCB> PCB_R;    // ¾ÍÐ÷¶ÓÁÐ
-queue<PCB> PCB_OVER; // OVER¶ÓÁÐ
+queue<PCB> PCB_P;    // ç”Ÿäº§è€…ç­‰å¾…é˜Ÿåˆ—
+queue<PCB> PCB_C;    // æ¶ˆè´¹è€…ç­‰å¾…é˜Ÿåˆ—
+queue<PCB> PCB_R;    // å°±ç»ªé˜Ÿåˆ—
+queue<PCB> PCB_OVER; // OVERé˜Ÿåˆ—
 
 
 void Print_Queue_OVER(queue<PCB> P)
 {
-    //Êä³ö¾ÍÐ÷¶ÓÁÐÖÐÊý¾Ý£¬·½±ãÇø·Ö½ø³ÌÀàÐÍ
+    //è¾“å‡ºå°±ç»ªé˜Ÿåˆ—ä¸­æ•°æ®ï¼Œæ–¹ä¾¿åŒºåˆ†è¿›ç¨‹ç±»åž‹
     queue<PCB> Q;
     Q = P;
     if (!Q.empty())
     {
         while (!Q.empty())
         {
-            // Êä³ö²¢É¾³ý¶ÓÁÐÖÐÔªËØ
+            // è¾“å‡ºå¹¶åˆ é™¤é˜Ÿåˆ—ä¸­å…ƒç´ 
             PCB T;
             T = Q.front();
             if(T.type==1)
@@ -57,7 +57,7 @@ void Print_Queue(queue<PCB> P)
     {
         while (!Q.empty())
         {
-            // Êä³ö²¢É¾³ý¶ÓÁÐÖÐÔªËØ
+            // è¾“å‡ºå¹¶åˆ é™¤é˜Ÿåˆ—ä¸­å…ƒç´ 
             PCB T;
             T = Q.front();
             cout << T.name << " ";
@@ -74,102 +74,102 @@ void Print_Queue(queue<PCB> P)
 void Wakeup_C()
 {
     PCB T;
-    // È¡³öµÈ´ý¶ÓÁÐÖÐµÄÔªËØ²¢ÇÒ½«Æäpop
+    // å–å‡ºç­‰å¾…é˜Ÿåˆ—ä¸­çš„å…ƒç´ å¹¶ä¸”å°†å…¶pop
     T = PCB_C.front();
     PCB_C.pop();
-    // ½«È¡³öµÄPCB²åÈëµ½¾ÍÐ÷¶ÓÁÐ¶ÓÎ²
+    // å°†å–å‡ºçš„PCBæ’å…¥åˆ°å°±ç»ªé˜Ÿåˆ—é˜Ÿå°¾
     PCB_R.push(T);
-    cout << "»½ÐÑÏû·ÑÕß³É¹¦" << endl;
+    cout << "å”¤é†’æ¶ˆè´¹è€…æˆåŠŸ" << endl;
 }
 
 void Wakeup_P()
 {
     PCB T;
-    // È¡³öµÈ´ý¶ÓÁÐÖÐµÄÔªËØ²¢½«Æä´ÓµÈ´ý¶ÓÁÐÖÐÉ¾³ý
+    // å–å‡ºç­‰å¾…é˜Ÿåˆ—ä¸­çš„å…ƒç´ å¹¶å°†å…¶ä»Žç­‰å¾…é˜Ÿåˆ—ä¸­åˆ é™¤
     T = PCB_P.front();
     PCB_P.pop();
     PCB_R.push(T);
-    cout << "»½ÐÑÉú²úÕß³É¹¦" << endl;
+    cout << "å”¤é†’ç”Ÿäº§è€…æˆåŠŸ" << endl;
 }
 
 int main()
 {
     Creat_Process();
-    // Êä³ö¸÷¶ÓÁÐµÄÐÅÏ¢
-    cout << "´´½¨Íê¶ÓÁÐÖ®ºóËùÓÐ¶ÓÁÐµÄÐÅÏ¢" << endl;
-    cout << "¾ÍÐ÷¶ÓÁÐ: ";
+    // è¾“å‡ºå„é˜Ÿåˆ—çš„ä¿¡æ¯
+    cout << "åˆ›å»ºå®Œé˜Ÿåˆ—ä¹‹åŽæ‰€æœ‰é˜Ÿåˆ—çš„ä¿¡æ¯" << endl;
+    cout << "å°±ç»ªé˜Ÿåˆ—: ";
     Print_Queue(PCB_R);
-    cout << "Éú²úÕßµÈ´ý¶ÓÁÐ: ";
+    cout << "ç”Ÿäº§è€…ç­‰å¾…é˜Ÿåˆ—: ";
     Print_Queue(PCB_P);
-    cout << "Ïû·ÑÕßµÈ´ý¶ÓÁÐ£º ";
+    cout << "æ¶ˆè´¹è€…ç­‰å¾…é˜Ÿåˆ—ï¼š ";
     Print_Queue(PCB_C);
-    cout << "OVER¶ÓÁÐ: ";
+    cout << "OVERé˜Ÿåˆ—: ";
     Print_Queue_OVER(PCB_OVER);
     cout << "_________________________________" << endl;
 
     while (1)
     {
-        // ¾ÍÐ÷¶ÓÁÐ²»Îª¿Õ
+        // å°±ç»ªé˜Ÿåˆ—ä¸ä¸ºç©º
         while (!PCB_R.empty())
         {
 
-            // ´Ó¾ÍÐ÷¶ÓÁÐÖÐÑ¡È¡ÆäÖÐµÄ½ø³Ì
+            // ä»Žå°±ç»ªé˜Ÿåˆ—ä¸­é€‰å–å…¶ä¸­çš„è¿›ç¨‹
             PCB temp;
             temp = PCB_R.front();
             PCB_R.pop();
             if (temp.type == 1)
             {
-                // Éú²úÕß
+                // ç”Ÿäº§è€…
                 if (num < BUF_SIZE - 1)
                 {
-                    // »º³åÇøÎª¿Õ,½«IDºÅ·ÅÈë»º³åÇøÖÐ
+                    // ç¼“å†²åŒºä¸ºç©º,å°†IDå·æ”¾å…¥ç¼“å†²åŒºä¸­
                     num++;
                     buffer[num] = temp.name;
-                    // ½«¸Ã½ø³Ì·Åµ½OVER¶ÓÁÐÖÐ
+                    // å°†è¯¥è¿›ç¨‹æ”¾åˆ°OVERé˜Ÿåˆ—ä¸­
                     PCB_OVER.push(temp);
                     if (!PCB_C.empty())
                     {
-                        // ÈôÏû·ÑÕßµÈ´ý¶ÓÁÐ²»Îª¿ÕÔò»½ÐÑÏû·ÑÕßµÈ´ý¶ÓÁÐÖÐµÄ½ø³Ì
+                        // è‹¥æ¶ˆè´¹è€…ç­‰å¾…é˜Ÿåˆ—ä¸ä¸ºç©ºåˆ™å”¤é†’æ¶ˆè´¹è€…ç­‰å¾…é˜Ÿåˆ—ä¸­çš„è¿›ç¨‹
                         Wakeup_C();
                     }
                 }
                 else
                 {
-                    cout << "»º³åÇøÒÑÂú£¡" << endl;
-                    // ½«µ±Ç°½ø³Ì·ÅÈëÉú²úÕßµÈ´ý¶ÓÁÐÖÐ
+                    cout << "ç¼“å†²åŒºå·²æ»¡ï¼" << endl;
+                    // å°†å½“å‰è¿›ç¨‹æ”¾å…¥ç”Ÿäº§è€…ç­‰å¾…é˜Ÿåˆ—ä¸­
                     PCB_P.push(temp);
                 }
             }
             else if (temp.type == 0)
             {
-                // Ïû·ÑÕß
+                // æ¶ˆè´¹è€…
                 if (num == -1)
                 {
-                    // »º³åÇøÖÐÃ»ÓÐ½á¹û
-                    cout << "»º³åÇøÎª¿Õ£¡" << endl;
-                    // ½«Æä¹Òµ½Ïû·ÑÕßµÈ´ý¶ÓÁÐÖÐ
+                    // ç¼“å†²åŒºä¸­æ²¡æœ‰ç»“æžœ
+                    cout << "ç¼“å†²åŒºä¸ºç©ºï¼" << endl;
+                    // å°†å…¶æŒ‚åˆ°æ¶ˆè´¹è€…ç­‰å¾…é˜Ÿåˆ—ä¸­
                     PCB_C.push(temp);
                 }
                 else
                 {
                     num--;
-                    // ½«µ±Ç°½ø³Ì¹Òµ½OVER¶ÓÁÐÖÐ
+                    // å°†å½“å‰è¿›ç¨‹æŒ‚åˆ°OVERé˜Ÿåˆ—ä¸­
                     PCB_OVER.push(temp);
-                    // »½ÐÑÉú²úÕß
+                    // å”¤é†’ç”Ÿäº§è€…
                     if (!PCB_P.empty())
                     {
                         Wakeup_P();
                     }
                 }
             }
-            // Êä³ö¸÷¶ÓÁÐµÄÐÅÏ¢
-            cout << "¾ÍÐ÷¶ÓÁÐ: ";
+            // è¾“å‡ºå„é˜Ÿåˆ—çš„ä¿¡æ¯
+            cout << "å°±ç»ªé˜Ÿåˆ—: ";
             Print_Queue(PCB_R);
-            cout << "Éú²úÕßµÈ´ý¶ÓÁÐ: ";
+            cout << "ç”Ÿäº§è€…ç­‰å¾…é˜Ÿåˆ—: ";
             Print_Queue(PCB_P);
-            cout << "Ïû·ÑÕßµÈ´ý¶ÓÁÐ£º ";
+            cout << "æ¶ˆè´¹è€…ç­‰å¾…é˜Ÿåˆ—ï¼š ";
             Print_Queue(PCB_C);
-            cout << "OVER¶ÓÁÐ: ";
+            cout << "OVERé˜Ÿåˆ—: ";
             Print_Queue_OVER(PCB_OVER);
             cout << "_________________________________" << endl;
         }
@@ -178,15 +178,15 @@ int main()
 
 void Creat_Process()
 {
-    // ²úÉú10¸ö½ø³Ì¼°ÆäÀà±ð£¬´æÈë¾ÍÐ÷¶ÓÁÐ
+    // äº§ç”Ÿ10ä¸ªè¿›ç¨‹åŠå…¶ç±»åˆ«ï¼Œå­˜å…¥å°±ç»ªé˜Ÿåˆ—
     PCB pcb[10];
     for (int i = 0; i < 10; i++)
     {
-        // ´´½¨½ø³ÌÊµÌåÒÔ¼°½ø³ÌÀàÐÍ
+        // åˆ›å»ºè¿›ç¨‹å®žä½“ä»¥åŠè¿›ç¨‹ç±»åž‹
         pcb[i].name = i;
         pcb[i].type = rand() % 2;
     }
-    // ½«½ø³Ì·Ö±ð·ÅÈë½ø³Ì¾ÍÐ÷¶ÓÁÐÖÐ
+    // å°†è¿›ç¨‹åˆ†åˆ«æ”¾å…¥è¿›ç¨‹å°±ç»ªé˜Ÿåˆ—ä¸­
     for (int i = 0; i < 10; i++)
     {
         PCB_R.push(pcb[i]);
