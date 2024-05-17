@@ -1,9 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
-
+# include <bits/stdc++.h>
 using namespace std;
 
 enum ProcessState { READY, WAITING, FINISHED };
