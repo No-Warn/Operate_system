@@ -9,7 +9,7 @@ using namespace std;
 enum ProcessState { READY, WAITING, FINISHED };
 
 struct PCB {
-    string name; // 使用  string 替代 char[]
+    string name; 
     ProcessState state;
     int priority;
     int remaining_time; // 剩余需要执行的时间
@@ -39,7 +39,7 @@ void simulate() {
 
     for (int i = 0; i < 10; ++i) {
         PCB process;
-        process.name = "P" +  to_string(i); // 使用  to_string() 进行转换
+        process.name = "P" +  to_string(i); 
         process.state = static_cast<ProcessState>(rand() % 2); // 0或1
         process.priority = rand() % 10 + 1; // 1到10
         process.remaining_time = rand() % 100 + 1; // 假设执行时间在1到100ms之间
@@ -55,7 +55,6 @@ void simulate() {
     }
 
     while (!readyQueue.empty()) { // 当就绪队列不为空时
-        // 假设基于优先数调度算法（简单起见，这里只是选择优先级最高的）
         int maxPriorityIndex = -1;
         int maxPriority = 0;
         for (int i = 0; i < (int)readyQueue.size(); ++i) { // 遍历寻找最高优先级
